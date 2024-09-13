@@ -4,7 +4,7 @@ import string
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
-from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 
 class Preprocessor(object):
     def __init__(self, config, logger):
@@ -63,6 +63,8 @@ class Preprocessor(object):
 
         if input_convertor == 'count_vectorization':
             data_x, train_x, validate_x, test_x = self.count_vectorization(data_x, train_x, validate_x, test_x)
+        elif input_convertor == 'tfidf_vectorization':
+            data_x, train_x, validate_x, test_x= self.tfidf_vectorization(data_x, train_x, validate_x, test_x)
 
         return data_x, data_y, train_x, train_y, validate_x, validate_y, test_x
 
@@ -73,6 +75,17 @@ class Preprocessor(object):
         # vocabulary = vectorizer.get_feature_names_out()
         # print("vocabulary:", vocabulary)
         vectorized_train_x  = vectorizer.transform(train_x)
+        vectorized_validate_x  = vectorizer.transform(validate_x)
+        vectorized_test_x  = vectorizer.transform(test_x)
+        return vectorized_data_x, vectorized_train_x, vectorized_validate_x, vectorized_test_x
+
+    def tfidf_vectorization(self, data_x, train_x, validate_x, test_x):
+        vectorizer = TfidfVectorizer(tokenizer=lambda x:x, preprocessor=lambda x:x)
+        vectorized_data_x = vectorizer.fit_transform(data_x)
+        # Print vocabulary
+        # vocabulary = vectorizer.get_feature_names_out()
+        # print("vocabulary:", vocabulary)
+        vectorized_train_x = vectorizer.transform(train_x)
         vectorized_validate_x  = vectorizer.transform(validate_x)
         vectorized_test_x  = vectorizer.transform(test_x)
         return vectorized_data_x, vectorized_train_x, vectorized_validate_x, vectorized_test_x
