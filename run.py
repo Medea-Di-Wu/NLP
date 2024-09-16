@@ -21,6 +21,8 @@ if __name__ == "__main__":
             logger.info("Preprocessor!")
             preprocessor = Preprocessor(config['preprocessing'], logger)
             data_x, data_y, train_x, train_y, validate_x, validate_y, test_x = preprocessor.process()
+            if config['training']['model_name'] != 'naivebayes':
+                config['training']['vocab_size'] = len(preprocessor.word2ind.keys())
 
             logger.info("Trainer!")
             trainer = Trainer(config['training'], logger, preprocessor.classes)

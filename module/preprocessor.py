@@ -3,6 +3,7 @@ import re
 import string
 import pandas as pd
 import numpy as np
+from tensorflow import keras
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 
@@ -65,6 +66,8 @@ class Preprocessor(object):
             data_x, train_x, validate_x, test_x = self.count_vectorization(data_x, train_x, validate_x, test_x)
         elif input_convertor == 'tfidf_vectorization':
             data_x, train_x, validate_x, test_x= self.tfidf_vectorization(data_x, train_x, validate_x, test_x)
+        elif input_convertor == 'nn_vectorization': # for neural network
+            data_x, train_x, validate_x, test_x = self.nn_vectorization(data_x, train_x, validate_x, test_x)
 
         return data_x, data_y, train_x, train_y, validate_x, validate_y, test_x
 
@@ -89,3 +92,38 @@ class Preprocessor(object):
         vectorized_validate_x  = vectorizer.transform(validate_x)
         vectorized_test_x  = vectorizer.transform(test_x)
         return vectorized_data_x, vectorized_train_x, vectorized_validate_x, vectorized_test_x
+
+    def nn_vectorization(self, data_x, train_x, validate_x, test_x):
+        self.word2ind = {}
+        self.ind2word = {}
+
+        specialtokens = ['<pad>', '<unk>']
+
+        def addword(word2ind, ind2word, word):
+            if word in word2ind:
+                return
+            ind2word[len(word2ind)] = word
+            word2ind[word] = len(word2ind)
+
+        for token in specialtokens:
+            addword(self.word2ind, self.ind2word, token)
+
+        for sent in data_x:
+            for word in sent:
+                addword(self.word2ind, self.ind2word, word)
+
+        def tokenize_sentences(data):
+            x_ids = []
+            for sent in data:
+                indsent = [self.word2ind.get(word, self.word2ind['<unk>']) for word in sent]
+                x_ids.append(indsent)
+            x_ids = keras.preprocessing.sequence.pad_sequences(x_ids, maxlen=self.config['maxlen'], padding='post',value=self.word2ind['<pad>'])
+            x_ids = np.array(x_ids)
+            return x_ids
+
+        data_x_ids = tokenize_sentences(data_x)
+        train_x_ids = tokenize_sentences(train_x)
+        validate_x_ids = tokenize_sentences(validate_x)
+        test_x_ids = tokenize_sentences(test_x)
+
+        return data_x_ids, train_x_ids, validate_x_ids, test_x_ids
