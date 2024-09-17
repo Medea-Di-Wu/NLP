@@ -6,9 +6,13 @@ from tensorflow.keras.layers import Embedding, Conv1D, GlobalMaxPooling1D, Dense
 from .nn import NN
 
 class TextCNN(NN):
-    def _build(self):
+    def _build(self, pretrained_embedding):
         model = Sequential()
-        model.add(Embedding(self.config['vocab_size'], self.config['embedding_dim'], input_length=self.config['maxlen'], trainable=True))
+        if pretrained_embedding is not None:
+            pretrained_embedding = pretrained_embedding[:self.config['vocab_size'], :]
+            model.add(Embedding(self.config['vocab_size'], self.config['embedding_dim'], weights=[pretrained_embedding], input_length=self.config['maxlen'], trainable=False))
+        else:
+            model.add(Embedding(self.config['vocab_size'], self.config['embedding_dim'], input_length=self.config['maxlen'], trainable=True))
         model.add(Conv1D(128, 7, activation='relu', padding='same'))
         model.add(MaxPooling1D())
         model.add(Conv1D(256, 7, activation='relu', padding='same'))

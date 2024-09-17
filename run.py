@@ -24,8 +24,10 @@ if __name__ == "__main__":
             if config['training']['model_name'] != 'naivebayes':
                 config['training']['vocab_size'] = len(preprocessor.word2ind.keys())
 
+            pretrained_embedding = preprocessor.embedding_matrix if config['preprocessing'].get('pretrained_embedding', None) else None
+
             logger.info("Trainer!")
-            trainer = Trainer(config['training'], logger, preprocessor.classes)
+            trainer = Trainer(config['training'], logger, preprocessor.classes, pretrained_embedding)
             logger.info(f"{train_x.shape=}")
             logger.info(f"{test_x.shape=}")
             model = trainer.fit(train_x, train_y)

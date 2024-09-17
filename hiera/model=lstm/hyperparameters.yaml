@@ -1,10 +1,13 @@
 preprocessing:
   input_convertor: 'nn_vectorization'
+  maxlen: 32
   embedding_dim: 100
   pretrained_embedding: './data/glove.twitter.27B.100d.txt'
 training:
-  model_name: 'textcnn'
+  model_name: 'biLSTM'
   learning_rate: 0.8
+  epochs: 3
+  maxlen: 32
   embedding_dim: 100
 predict:
-  output_path: ./data/textcnn_submission.csv
+  output_path: ./data/lstm_submission.csv

@@ -1,11 +1,11 @@
 class NN(object):
-    def __init__(self, classes, config):
+    def __init__(self, classes, config, pretrained_embedding):
         self.classes = classes
         self.num_class = len(classes)
         self.config = config
-        self.model = self._build()
+        self.model = self._build(pretrained_embedding)
 
-    def _build(self):
+    def _build(self, pretrained_embedding):
         pass
 
     def fit(self, train_x, train_y):

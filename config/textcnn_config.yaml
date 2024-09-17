@@ -19,6 +19,7 @@ preprocessing:
   batch_size: 32
   input_convertor: nn_vectorization
   embedding_dim: 100
+  pretrained_embedding: ./data/glove.twitter.27B.100d.txt
 training:
   learning_rate: 0.8
   dropout_rate: 0.5

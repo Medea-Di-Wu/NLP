@@ -32,9 +32,9 @@ training:
   maxlen: 32
   predict_only: false
   output_path: ./output
-  model_name: textrnn
+  model_name: biLSTM
 predict:
-  output_path: ./data/textrnn_submission.csv
+  output_path: ./data/lstm_submission.csv
   enable_calibration: false
   calibrator_type: platt_scaling
   calibrators_output_path: ./output

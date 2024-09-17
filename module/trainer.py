@@ -1,21 +1,24 @@
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import classification_report
-from module.model import NaiveBayes, TextCNN, TextRNN
+from module.model import NaiveBayes, TextCNN, TextRNN, biLSTM
 
 class Trainer(object):
-    def __init__(self, config, logger, classes):
+    def __init__(self, config, logger, classes, pretrained_embedding):
         self.config = config
         self.logger = logger
         self.classes = classes
+        self.pretrained_embedding = pretrained_embedding
         self._create_model(classes)
 
     def _create_model(self, classes):
         if self.config['model_name'] == 'naivebayes':
             self.model = NaiveBayes(classes)
         elif self.config['model_name'] == 'textcnn':
-            self.model = TextCNN(classes, self.config)
+            self.model = TextCNN(classes, self.config, self.pretrained_embedding)
         elif self.config['model_name'] == 'textrnn':
-            self.model = TextRNN(classes, self.config)
+            self.model = TextRNN(classes, self.config, self.pretrained_embedding)
+        elif self.config['model_name'] == 'biLSTM':
+            self.model = biLSTM(classes, self.config, self.pretrained_embedding)
         else:
             self.logger.warning("Model Type:{} is not support yet".format(self.config['model_name']))
 

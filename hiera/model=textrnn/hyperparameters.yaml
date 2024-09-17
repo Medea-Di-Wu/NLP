@@ -2,6 +2,7 @@ preprocessing:
   input_convertor: 'nn_vectorization'
   maxlen: 32
   embedding_dim: 100
+  pretrained_embedding: './data/glove.twitter.27B.100d.txt'
 training:
   model_name: 'textrnn'
   learning_rate: 0.8
