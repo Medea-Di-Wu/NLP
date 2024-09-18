@@ -1,6 +1,6 @@
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import classification_report
-from module.model import NaiveBayes, TextCNN, TextRNN, biLSTM
+from module.model import NaiveBayes, TextCNN, TextRNN, biLSTM, TransformerClassifier
 
 class Trainer(object):
     def __init__(self, config, logger, classes, pretrained_embedding):
@@ -19,6 +19,8 @@ class Trainer(object):
             self.model = TextRNN(classes, self.config, self.pretrained_embedding)
         elif self.config['model_name'] == 'biLSTM':
             self.model = biLSTM(classes, self.config, self.pretrained_embedding)
+        elif self.config['model_name'] == 'transformer':
+            self.model = TransformerClassifier(classes, self.config, self.pretrained_embedding)
         else:
             self.logger.warning("Model Type:{} is not support yet".format(self.config['model_name']))
 

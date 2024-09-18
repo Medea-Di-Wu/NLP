@@ -1,0 +1,43 @@
+preprocessing:
+  split_ratio: 0.3
+  input_trainset: ./data/train.csv
+  input_testset: ./data/test.csv
+  # input_trainset: ./data/mini_train.csv
+  # input_testset: ./data/mini_test.csv
+  random_seed: 0
+  classes:
+  - toxic
+  - severe_toxic
+  - obscene
+  - threat
+  - insult
+  - identity_hate
+  input_text_column: comment_text
+  input_id_column: id
+  maxlen: 128
+  skip_tokenization: false
+  batch_size: 32
+  input_convertor: nn_vectorization
+  pretrained_embedding: ./data/glove.twitter.27B.100d.txt
+  embedding_dim: 100
+training:
+  learning_rate: 0.8
+  dropout_rate: 0.1
+  batch_normalization: true
+  optimizer: sgd
+  epochs: 1
+  gradient_cliping: true
+  batch_size: 32
+  embedding_dim: 100
+  maxlen: 128
+  predict_only: false
+  output_path: ./output
+  model_name: transformer
+  num_heads: 1
+  ff_dim: 128
+predict:
+  output_path: ./data/transformer_submission.csv
+  enable_calibration: false
+  calibrator_type: platt_scaling
+  calibrators_output_path: ./output
+  debug_validation: false
