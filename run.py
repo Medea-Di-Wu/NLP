@@ -39,6 +39,8 @@ if __name__ == "__main__":
 
             logger.info("Predictor!")
             predictor = Predictor(config['predict'], logger, model, preprocessor.classes)
+            if config['predict']['enable_calibration']:
+                predictor.train_calibrators(validate_x, validate_y)
             probs = predictor.predict_prob(test_x)
             predictor.save_result(preprocessor.test_ids, probs)
 

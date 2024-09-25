@@ -29,7 +29,7 @@ training:
   output_path: "./output"
 predict:
   output_path: './data/submission.csv'
-  enable_calibration: False
+  enable_calibration: True
   calibrator_type: 'platt_scaling'
   calibrators_output_path: './output'
   debug_validation: False

@@ -37,7 +37,7 @@ training:
   ff_dim: 128
 predict:
   output_path: ./data/transformer_submission.csv
-  enable_calibration: false
+  enable_calibration: true
   calibrator_type: platt_scaling
   calibrators_output_path: ./output
   debug_validation: false
